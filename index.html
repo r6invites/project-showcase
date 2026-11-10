@@ -53,6 +53,13 @@ main{padding:28px 0 56px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
 .thumb{aspect-ratio:16/10;position:relative;overflow:hidden}
 .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb video{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;background:#000}
+.play{position:absolute;right:10px;bottom:10px;font:600 .85rem var(--sans);background:var(--ink);color:var(--paper);border:0;border-radius:999px;padding:7px 14px;cursor:pointer}
+.play:hover{background:var(--rose);color:#fff}
+dialog{border:0;border-radius:12px;padding:0;max-width:94vw;background:#000;overflow:hidden}
+dialog::backdrop{background:rgba(0,0,0,.75)}
+dialog video{max-width:94vw;max-height:88vh;width:auto;height:auto;display:block;margin:0 auto}
+dialog button{position:absolute;top:8px;right:8px;z-index:1;font:600 .9rem var(--sans);background:var(--paper);color:var(--ink);border:0;border-radius:8px;padding:6px 12px;cursor:pointer}
 .mock{position:absolute;inset:0;display:flex;flex-direction:column}
 .mock i{display:block;height:22px;background:rgba(0,0,0,.18);flex:none}
 .mock b{flex:1;display:grid;place-content:center;text-align:center;padding:10px;font:700 1.5rem/1.1 var(--serif);color:var(--tc)}
@@ -115,6 +122,7 @@ footer .links a:hover{background:var(--rose);color:#fff}
 </div>
 
 <main class="wrap" id="results" aria-live="polite"></main>
+<dialog id="dlg" aria-label="Project video"><button id="dclose">Close</button><video id="dvid" controls playsinline></video></dialog>
 
 <footer id="foot" hidden>
   <div class="wrap">
@@ -136,6 +144,8 @@ footer .links a:hover{background:var(--rose);color:#fff}
    projects/<folder>/<image>      -> its screenshot (jpg, png, webp, gif, svg) */
 const FALLBACK_REPO = {owner:"r6invites", repo:"r6invites.github.io"}; // used only if the address can't be detected
 const IMG = /\.(jpe?g|png|webp|gif|svg|avif)$/i;
+const VID = /\.(mp4|webm)$/i;
+const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const $ = s => document.querySelector(s);
 const esc = s => String(s??"").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const state = {q:"", cat:"All", sort:"featured", group:true};
@@ -191,10 +201,15 @@ async function loadProjects(){
   const list=await Promise.all(Object.entries(map).map(async([dir,files])=>{
     let info; try{info=await getJSON(`projects/${encodeURIComponent(dir)}/info.json`);}catch(e){return null;}
     const imgFile = info.image || (files && (files.find(f=>/^cover\./i.test(f)&&IMG.test(f)) || files.find(f=>IMG.test(f))));
+    const vids = files ? files.filter(f=>VID.test(f)) : [];
+    const fullF = info.video || vids.find(f=>/^full\./i.test(f)) || vids.find(f=>!/^preview\./i.test(f)) || vids[0];
+    const prevF = info.preview || vids.find(f=>/^preview\./i.test(f)) || fullF;
+    const vp = f => !f ? "" : /^https?:/.test(f) ? f : `projects/${encodeURIComponent(dir)}/${encodeURIComponent(f)}`;
     return {
       name:info.name||pretty(dir), category:info.category||"Other", price:info.price===undefined||info.price===""?null:Number(info.price),
       url:info.url||"", tags:Array.isArray(info.tags)?info.tags:[], desc:info.desc||"", featured:info.featured?1:0,
-      colors:info.colors||["#e3e9e5","#14231e"],
+      colors:info.colors||["#e3e9e5","#14231e"], aspect:/^\d+\s*\/\s*\d+$/.test(info.aspect||"")?info.aspect:"",
+      video: vp(fullF), preview: vp(prevF),
       image: imgFile ? `projects/${encodeURIComponent(dir)}/${encodeURIComponent(imgFile)}` : ""
     };
   }));
@@ -212,9 +227,11 @@ $("#chips").addEventListener("click",e=>{
   render();
 });
 
+const ar = p => p.aspect ? ` style="aspect-ratio:${p.aspect}"` : "";
 function thumb(p){
-  if(p.image) return `<div class="thumb"><img src="${p.image}" alt="Screenshot of ${esc(p.name)}" loading="lazy"></div>`;
-  return `<div class="thumb"><div class="mock" style="background:${esc(p.colors[0])};--tc:${esc(p.colors[1])}"><i></i><b><span>${esc(p.name)}<em>${esc(p.category)}</em></span></b></div></div>`;
+  if(p.video) return `<div class="thumb"${ar(p)}><video muted loop playsinline preload="none" ${p.image?`poster="${p.image}"`:""} src="${esc(p.preview)}" aria-label="Preview of ${esc(p.name)}"></video><button class="play" data-v="${esc(p.video)}" data-n="${esc(p.name)}">Watch full view</button></div>`;
+  if(p.image) return `<div class="thumb"${ar(p)}><img src="${p.image}" alt="Screenshot of ${esc(p.name)}" loading="lazy"></div>`;
+  return `<div class="thumb"${ar(p)}><div class="mock" style="background:${esc(p.colors[0])};--tc:${esc(p.colors[1])}"><i></i><b><span>${esc(p.name)}<em>${esc(p.category)}</em></span></b></div></div>`;
 }
 function card(p){
   const subject=encodeURIComponent("Quotation for a site like "+p.name);
@@ -249,6 +266,16 @@ function render(){
     `<section class="group"><h2>${esc(c)}</h2><div class="grid">${list.filter(p=>p.category===c).map(card).join("")}</div></section>`).join("");
 }
 
+const io = new IntersectionObserver(es=>es.forEach(e=>{const v=e.target; if(still) return; if(e.isIntersecting) v.play().catch(()=>{}); else v.pause();}),{threshold:.6});
+function watchVideos(){io.disconnect(); document.querySelectorAll(".thumb video").forEach(v=>io.observe(v));}
+const _render = render; render = function(){_render(); watchVideos();};
+$("#results").addEventListener("click",e=>{
+  const b=e.target.closest(".play"); if(!b) return;
+  const d=$("#dlg"), v=$("#dvid"); v.src=b.dataset.v; d.setAttribute("aria-label",b.dataset.n); d.showModal(); v.play().catch(()=>{});
+});
+$("#dclose").addEventListener("click",()=>$("#dlg").close());
+$("#dlg").addEventListener("close",()=>{const v=$("#dvid"); v.pause(); v.removeAttribute("src"); v.load();});
+$("#dlg").addEventListener("click",e=>{if(e.target.id==="dlg") $("#dlg").close();});
 $("#q").addEventListener("input",e=>{state.q=e.target.value;render();});
 $("#sort").addEventListener("change",e=>{state.sort=e.target.value;render();});
 $("#group").addEventListener("change",e=>{state.group=e.target.checked;render();});
