@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>R6 Invites</title>
+<meta name="description" content="Wedding invitation websites and other custom sites, with clear starting prices.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#14231e; --muted:#5b6b64; --paper:#f1f4f1; --card:#ffffff; --line:#d9e0db;
+  --rose:#b83a62; --rose-d:#962d4e; --price:#14231e;
+  --serif:'Fraunces',Georgia,serif; --sans:'Figtree',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{--ink:#eaf1ed; --muted:#9db0a7; --paper:#0f1a16; --card:#16251f; --line:#27382f; --rose:#e0678c; --rose-d:#ee86a5; --price:#eaf1ed}
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.55 var(--sans)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--rose);outline-offset:2px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+
+header.top{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 0}
+.brand{font:700 1.25rem var(--serif);text-decoration:none;letter-spacing:.2px}
+.brand span{color:var(--rose)}
+.contact-mini{display:flex;gap:18px;font-size:.95rem}
+.contact-mini a{text-decoration:none;color:var(--muted)}
+.contact-mini a:hover{color:var(--rose)}
+
+.hero{padding:44px 0 28px}
+.hero h1{font:700 clamp(2.2rem,6vw,4rem)/1.05 var(--serif);margin:0 0 14px;max-width:16ch;letter-spacing:-.02em}
+.hero p{margin:0;max-width:52ch;color:var(--muted);font-size:1.1rem}
+
+.bar{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--line);padding:12px 0}
+.bar .wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.bar input[type=search],.bar select{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:9px 12px}
+.bar input[type=search]{flex:1 1 240px;min-width:0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;flex:1 1 100%}
+.chip{font:500 .9rem var(--sans);color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:999px;padding:6px 14px;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.group-toggle{display:flex;align-items:center;gap:6px;font-size:.9rem;color:var(--muted)}
+
+main{padding:28px 0 56px}
+.group{margin-bottom:44px}
+.group h2{font:700 1.6rem var(--serif);margin:0 0 4px}
+.group .gdesc{margin:0 0 18px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:22px}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.thumb{aspect-ratio:16/10;position:relative;overflow:hidden}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.mock{position:absolute;inset:0;display:flex;flex-direction:column}
+.mock i{display:block;height:22px;background:rgba(0,0,0,.18);flex:none}
+.mock b{flex:1;display:grid;place-content:center;text-align:center;padding:10px;font:700 1.5rem/1.1 var(--serif);color:var(--tc)}
+.mock em{font:500 .8rem var(--sans);font-style:normal;opacity:.8;display:block;margin-top:6px}
+.body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:10px;flex:1}
+.body h3{margin:0;font:700 1.2rem var(--serif)}
+.body p{margin:0;color:var(--muted);font-size:.95rem}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:.8rem;color:var(--muted);background:var(--paper);border-radius:6px;padding:2px 8px}
+.quote{margin-top:auto;padding-top:12px;border-top:1px dashed var(--line);display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.quote small{color:var(--muted);font-size:.8rem}
+.price{font:700 1.35rem var(--serif);color:var(--price)}
+.actions{display:flex;gap:8px}
+.btn{flex:1;text-align:center;text-decoration:none;font:600 .92rem var(--sans);padding:9px 12px;border-radius:8px;border:1px solid var(--ink)}
+.btn.primary{background:var(--rose);border-color:var(--rose);color:#fff}
+.btn.primary:hover{background:var(--rose-d)}
+.btn.ghost:hover{background:var(--ink);color:var(--paper)}
+
+.empty code{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:1px 6px}
+.empty{padding:50px 0;text-align:center;color:var(--muted)}
+footer{background:var(--ink);color:var(--paper);padding:44px 0}
+footer h2{font:700 1.8rem var(--serif);margin:0 0 8px}
+footer p{margin:0 0 18px;opacity:.8;max-width:52ch}
+footer .links{display:flex;flex-wrap:wrap;gap:12px}
+footer .links a{background:var(--paper);color:var(--ink);text-decoration:none;font-weight:600;padding:10px 18px;border-radius:8px}
+footer .links a:hover{background:var(--rose);color:#fff}
+.note{font-size:.8rem;opacity:.6;margin-top:22px}
+@media (max-width:560px){.contact-mini{display:none}}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="#" id="brand">R6 <span>Invites</span></a>
+    <nav class="contact-mini" aria-label="Contact" id="miniContact" hidden>
+      <a data-mail href="#">Email</a>
+      <a data-phone href="#">Call</a>
+    </nav>
+  </header>
+  <section class="hero">
+    <h1 id="heroTitle">Websites we have built.</h1>
+    <p id="heroText">Browse the projects below. Each one shows its starting price.</p>
+  </section>
+</div>
+
+<div class="bar" id="bar" hidden>
+  <div class="wrap">
+    <input type="search" id="q" placeholder="Search by name, tag or description" aria-label="Search projects">
+    <select id="sort" aria-label="Sort projects">
+      <option value="featured">Sort: Featured</option>
+      <option value="name">Name A–Z</option>
+      <option value="low">Price low to high</option>
+      <option value="high">Price high to low</option>
+    </select>
+    <label class="group-toggle"><input type="checkbox" id="group" checked> Group by category</label>
+    <div class="chips" id="chips" role="group" aria-label="Filter by category"></div>
+  </div>
+</div>
+
+<main class="wrap" id="results" aria-live="polite"></main>
+
+<footer id="foot" hidden>
+  <div class="wrap">
+    <h2>Want a site like one of these?</h2>
+    <p>Tell me the date, the style you like and roughly what you need. I will reply with a final quotation.</p>
+    <div class="links">
+      <a data-mail href="#" id="fMail"></a>
+      <a data-phone href="#" id="fPhone"></a>
+      <a data-wa href="#" id="fWa" target="_blank" rel="noopener">WhatsApp</a>
+    </div>
+    <div class="note">© <span id="yr"></span> R6 Invites. Prices are starting prices and may change with the scope of work.</div>
+  </div>
+</footer>
+
+<script>
+/* Nothing is hard-coded here. Content comes from files you upload:
+   site.json                      -> your contact details (optional)
+   projects/<folder>/info.json    -> one project per folder
+   projects/<folder>/<image>      -> its screenshot (jpg, png, webp, gif, svg) */
+const FALLBACK_REPO = {owner:"r6invites", repo:"r6invites.github.io"}; // used only if the address can't be detected
+const IMG = /\.(jpe?g|png|webp|gif|svg|avif)$/i;
+const $ = s => document.querySelector(s);
+const esc = s => String(s??"").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const state = {q:"", cat:"All", sort:"featured", group:true};
+let SITE = {}, PROJECTS = [];
+
+const fmt = n => (SITE.currency||"₹") + Number(n).toLocaleString("en-IN");
+const pretty = d => d.replace(/[-_]+/g," ").replace(/\b\w/g,c=>c.toUpperCase());
+
+function repoInfo(){
+  const h=location.hostname, seg=location.pathname.split("/")[1]||"";
+  if(h.endsWith(".github.io")){
+    const owner=h.split(".")[0];
+    return {owner, repo: seg && !seg.includes(".") ? seg : owner+".github.io"};
+  }
+  return FALLBACK_REPO;
+}
+async function getJSON(url){const r=await fetch(url,{cache:"no-cache"}); if(!r.ok) throw new Error(r.status); return r.json();}
+
+async function loadSite(){
+  try{SITE=await getJSON("site.json");}catch(e){SITE={};}
+  if(SITE.brand) $("#brand").textContent=SITE.brand, document.title=SITE.brand;
+  if(SITE.title) $("#heroTitle").textContent=SITE.title;
+  if(SITE.intro) $("#heroText").textContent=SITE.intro;
+  const {email,phone,whatsapp}=SITE;
+  document.querySelectorAll("[data-mail]").forEach(a=>{a.hidden=!email; if(email){a.href="mailto:"+email; if(a.id==="fMail")a.textContent=email;}});
+  document.querySelectorAll("[data-phone]").forEach(a=>{a.hidden=!phone; if(phone){a.href="tel:"+phone.replace(/\s/g,""); if(a.id==="fPhone")a.textContent=phone;}});
+  $("#fWa").hidden=!whatsapp; if(whatsapp) $("#fWa").href="https://wa.me/"+String(whatsapp).replace(/\D/g,"");
+  $("#miniContact").hidden=!(email||phone);
+  $("#foot").hidden=!(email||phone||whatsapp);
+  $("#yr").textContent=new Date().getFullYear();
+}
+
+async function findFolders(){
+  // Preferred: one GitHub API call that lists every file in the repo.
+  try{
+    const {owner,repo}=repoInfo();
+    const t=await getJSON(`https://api.github.com/repos/${owner}/${repo}/git/trees/HEAD?recursive=1`);
+    const map={};
+    t.tree.filter(x=>x.type==="blob" && x.path.startsWith("projects/")).forEach(x=>{
+      const [,dir,...rest]=x.path.split("/"); if(!dir||dir.startsWith("_")||!rest.length||rest.length>1) return;
+      (map[dir]=map[dir]||[]).push(rest[0]);
+    });
+    return map;
+  }catch(e){
+    // Fallback: projects/index.json listing folder names, e.g. ["anu-ravi","bloom-florist"]
+    try{const names=await getJSON("projects/index.json"); const m={}; names.forEach(n=>m[n]=null); return m;}catch(_){return null;}
+  }
+}
+
+async function loadProjects(){
+  const map=await findFolders();
+  if(!map) return null;
+  const list=await Promise.all(Object.entries(map).map(async([dir,files])=>{
+    let info; try{info=await getJSON(`projects/${encodeURIComponent(dir)}/info.json`);}catch(e){return null;}
+    const imgFile = info.image || (files && (files.find(f=>/^cover\./i.test(f)&&IMG.test(f)) || files.find(f=>IMG.test(f))));
+    return {
+      name:info.name||pretty(dir), category:info.category||"Other", price:info.price===undefined||info.price===""?null:Number(info.price),
+      url:info.url||"", tags:Array.isArray(info.tags)?info.tags:[], desc:info.desc||"", featured:info.featured?1:0,
+      colors:info.colors||["#e3e9e5","#14231e"],
+      image: imgFile ? `projects/${encodeURIComponent(dir)}/${encodeURIComponent(imgFile)}` : ""
+    };
+  }));
+  return list.filter(Boolean);
+}
+
+function setupChips(){
+  const cats=["All",...[...new Set(PROJECTS.map(p=>p.category))].sort()];
+  $("#chips").innerHTML=cats.map(n=>`<button class="chip" data-c="${esc(n)}" aria-pressed="${n===state.cat}">${esc(n)}</button>`).join("");
+}
+$("#chips").addEventListener("click",e=>{
+  const b=e.target.closest(".chip"); if(!b) return;
+  state.cat=b.dataset.c;
+  document.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed",c===b));
+  render();
+});
+
+function thumb(p){
+  if(p.image) return `<div class="thumb"><img src="${p.image}" alt="Screenshot of ${esc(p.name)}" loading="lazy"></div>`;
+  return `<div class="thumb"><div class="mock" style="background:${esc(p.colors[0])};--tc:${esc(p.colors[1])}"><i></i><b><span>${esc(p.name)}<em>${esc(p.category)}</em></span></b></div></div>`;
+}
+function card(p){
+  const subject=encodeURIComponent("Quotation for a site like "+p.name);
+  const body=encodeURIComponent('Hi, I like the "'+p.name+'" project and would like a quotation.\n\nEvent/business date:\nPreferred language:\nExtras needed:');
+  const live=p.url?`<a class="btn ghost" href="${esc(p.url)}" target="_blank" rel="noopener">View live</a>`:"";
+  const ask=SITE.email?`<a class="btn primary" href="mailto:${esc(SITE.email)}?subject=${subject}&body=${body}">Get a quote</a>`:"";
+  return `<article class="card">${thumb(p)}<div class="body">
+    <h3>${esc(p.name)}</h3>${p.desc?`<p>${esc(p.desc)}</p>`:""}
+    ${p.tags.length?`<div class="tags">${p.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join("")}</div>`:""}
+    <div class="quote"><small>${p.price===null?"Price":"Starting at"}</small><span class="price">${p.price===null?"On request":fmt(p.price)}</span></div>
+    ${live||ask?`<div class="actions">${live}${ask}</div>`:""}
+  </div></article>`;
+}
+
+function render(){
+  const out=$("#results");
+  if(!PROJECTS.length){
+    out.innerHTML=`<div class="empty"><p>No projects yet.<br>Upload a folder to <code>projects/</code> in the repository and it will appear here.</p></div>`;return;
+  }
+  const q=state.q.trim().toLowerCase();
+  const list=PROJECTS.filter(p=>(state.cat==="All"||p.category===state.cat)&&(!q||[p.name,p.category,p.desc,...p.tags].join(" ").toLowerCase().includes(q)));
+  const price=(p,d)=>p.price===null?d:p.price;
+  const sorts={
+    featured:(a,b)=>b.featured-a.featured||a.name.localeCompare(b.name),
+    name:(a,b)=>a.name.localeCompare(b.name),
+    low:(a,b)=>price(a,Infinity)-price(b,Infinity)||a.name.localeCompare(b.name),
+    high:(a,b)=>price(b,-1)-price(a,-1)||a.name.localeCompare(b.name)};
+  list.sort(sorts[state.sort]);
+  if(!list.length){out.innerHTML=`<div class="empty"><p>No projects match your search.<br>Try a shorter word or choose All.</p></div>`;return;}
+  if(!state.group){out.innerHTML=`<div class="grid">${list.map(card).join("")}</div>`;return;}
+  out.innerHTML=[...new Set(list.map(p=>p.category))].sort().map(c=>
+    `<section class="group"><h2>${esc(c)}</h2><div class="grid">${list.filter(p=>p.category===c).map(card).join("")}</div></section>`).join("");
+}
+
+$("#q").addEventListener("input",e=>{state.q=e.target.value;render();});
+$("#sort").addEventListener("change",e=>{state.sort=e.target.value;render();});
+$("#group").addEventListener("change",e=>{state.group=e.target.checked;render();});
+
+(async()=>{
+  await loadSite();
+  const list=await loadProjects();
+  if(list===null){$("#results").innerHTML=`<div class="empty"><p>Couldn't read the projects folder.<br>Check that the repository is public, or add <code>projects/index.json</code> listing your folder names.</p></div>`;return;}
+  PROJECTS=list; setupChips();
+  $("#bar").hidden=!PROJECTS.length;
+  render();
+})();
+</script>
+</body>
+</html>
