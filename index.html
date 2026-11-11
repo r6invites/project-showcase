@@ -72,8 +72,8 @@ dialog button{position:absolute;top:8px;right:8px;z-index:1;font:600 .9rem var(-
 .quote{margin-top:auto;padding-top:12px;border-top:1px dashed var(--line);display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 .quote small{color:var(--muted);font-size:.8rem}
 .price{font:700 1.35rem var(--serif);color:var(--price)}
-.actions{display:flex;gap:8px}
-.btn{flex:1;text-align:center;text-decoration:none;font:600 .92rem var(--sans);padding:9px 12px;border-radius:8px;border:1px solid var(--ink)}
+.actions{display:flex;flex-wrap:wrap;gap:8px}
+.btn{flex:1 1 40%;text-align:center;text-decoration:none;font:600 .92rem var(--sans);padding:9px 12px;border-radius:8px;border:1px solid var(--ink)}
 .btn.primary{background:var(--rose);border-color:var(--rose);color:#fff}
 .btn.primary:hover{background:var(--rose-d)}
 .btn.ghost:hover{background:var(--ink);color:var(--paper)}
@@ -207,7 +207,7 @@ async function loadProjects(){
     const vp = f => !f ? "" : /^https?:/.test(f) ? f : `projects/${encodeURIComponent(dir)}/${encodeURIComponent(f)}`;
     return {
       name:info.name||pretty(dir), category:info.category||"Other", price:info.price===undefined||info.price===""?null:Number(info.price),
-      url:info.url||"", tags:Array.isArray(info.tags)?info.tags:[], desc:info.desc||"", featured:info.featured?1:0,
+      links:(Array.isArray(info.links)?info.links.filter(l=>l&&l.url):(info.url?[{label:"View live",url:info.url}]:[])), tags:Array.isArray(info.tags)?info.tags:[], desc:info.desc||"", featured:info.featured?1:0,
       colors:info.colors||["#e3e9e5","#14231e"], aspect:/^\d+\s*\/\s*\d+$/.test(info.aspect||"")?info.aspect:"",
       video: vp(fullF), preview: vp(prevF),
       image: imgFile ? `projects/${encodeURIComponent(dir)}/${encodeURIComponent(imgFile)}` : ""
@@ -236,7 +236,7 @@ function thumb(p){
 function card(p){
   const subject=encodeURIComponent("Quotation for a site like "+p.name);
   const body=encodeURIComponent('Hi, I like the "'+p.name+'" project and would like a quotation.\n\nEvent/business date:\nPreferred language:\nExtras needed:');
-  const live=p.url?`<a class="btn ghost" href="${esc(p.url)}" target="_blank" rel="noopener">View live</a>`:"";
+  const live=p.links.map(l=>`<a class="btn ghost" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label||"View live")}</a>`).join("");
   const ask=SITE.email?`<a class="btn primary" href="mailto:${esc(SITE.email)}?subject=${subject}&body=${body}">Get a quote</a>`:"";
   return `<article class="card">${thumb(p)}<div class="body">
     <h3>${esc(p.name)}</h3>${p.desc?`<p>${esc(p.desc)}</p>`:""}

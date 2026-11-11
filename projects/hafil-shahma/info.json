@@ -1,8 +1,11 @@
 {
-  "name": "Hafill & Shahma",
+  "name": "Aadil & Zainab",
   "category": "Wedding Invitations",
-  "price": null,
-  "url": "projects/hafil-shahma/demo/",
+  "price": 1999,
+  "links": [
+    { "label": "Auto-scroll demo", "url": "projects/hafil-shahma/demo/" },
+    { "label": "Interactive demo", "url": "projects/hafil-shahma/interactive/" }
+  ],
   "desc": "Animated digital wedding invitation with a tap-to-unveil opening.",
   "tags": ["Animated", "Mobile-first", "Arabic"],
   "aspect": "9/16",
