@@ -1,0 +1,13 @@
+{
+  "name": "Emerald Nikah",
+  "category": "Wedding Invitations",
+  "price": 1999,
+  "links": [
+    { "label": "Auto-scroll demo", "url": "projects/emerald-nikah/demo/" },
+    { "label": "Interactive demo", "url": "projects/emerald-nikah/interactive/" }
+  ],
+  "desc": "Animated Nikah invitation in emerald and gold, with a tap-to-unveil opening and a calligraphy monogram.",
+  "tags": ["Animated", "Emerald & Gold", "Calligraphy monogram", "Mobile-first", "Arabic"],
+  "aspect": "9/16",
+  "featured": true
+}
