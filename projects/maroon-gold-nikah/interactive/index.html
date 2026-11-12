@@ -998,7 +998,7 @@ function moveAndFormHeart(heartObj, isInitial = false) {
 setTimeout(() => { createDustHearts('groom-name', 1); createDustHearts('bride-name', 2); }, 2000);
 
 function initCountdown() {
-  const target = new Date('2026-08-01T12:30:00+05:30');
+  const target = new Date(Date.now() + 60*86400000); /* showcase demo: rolling countdown so it never expires */
   function update() {
     const now  = new Date(); const diff = target - now;
     if (diff <= 0) {
@@ -1020,7 +1020,7 @@ function initCountdown() {
       );
     }
   }
-  update(); const timer = setInterval(update, 1000);
+  let timer; update(); timer = setInterval(update, 1000);
 }
 
 function initParticles() {
