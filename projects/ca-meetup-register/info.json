@@ -1,0 +1,11 @@
+{
+  "name": "Ehsaas'26 Registration System",
+  "category": "Event Registration Systems",
+  "price": null,
+  "links": [
+    { "label": "Try the live demo", "url": "ca-meetup/" }
+  ],
+  "desc": "Complete registration for a community event: public sign-up, UPI payment proof, tickets with QR codes, QR scanning at the gate, payment-screenshot reading and an admin dashboard. The demo runs on sample data.",
+  "tags": ["Registration", "Ticket & QR", "QR scanning", "OCR", "Admin dashboard", "Mobile-first"],
+  "featured": true
+}
