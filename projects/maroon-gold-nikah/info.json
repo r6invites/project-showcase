@@ -2,9 +2,20 @@
   "name": "Maroon Gold Nikah",
   "category": "Wedding Invitations",
   "links": [
-    { "label": "Interactive demo", "url": "projects/maroon-gold-nikah/interactive/" }
+    {
+      "label": "Interactive demo",
+      "url": "projects/maroon-gold-nikah/interactive/"
+    }
   ],
+  "preview": "preview-v2.mp4",
   "desc": "Animated Nikah and wedding invitation in maroon and gold, with a swipe-to-open monogram, a gold-dust background, a countdown and add-to-calendar.",
-  "tags": ["Animated", "Maroon & Gold", "Monogram", "Countdown", "Nasheed", "Mobile-first"],
+  "tags": [
+    "Animated",
+    "Maroon & Gold",
+    "Monogram",
+    "Countdown",
+    "Nasheed",
+    "Mobile-first"
+  ],
   "aspect": "9/16"
 }
