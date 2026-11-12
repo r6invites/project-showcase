@@ -7,7 +7,7 @@
       "url": "projects/maroon-gold-nikah/interactive/"
     }
   ],
-  "preview": "preview-v2.mp4",
+  "preview": "preview-v3.mp4",
   "desc": "Animated Nikah and wedding invitation in maroon and gold, with a swipe-to-open monogram, a gold-dust background, a countdown and add-to-calendar.",
   "tags": [
     "Animated",
@@ -17,5 +17,6 @@
     "Nasheed",
     "Mobile-first"
   ],
-  "aspect": "9/16"
+  "aspect": "9/16",
+  "image": "cover-v2.jpg"
 }
