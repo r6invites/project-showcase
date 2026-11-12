@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Event Registration Demo · R6 Invites</title>
+<meta name="description" content="A working demo of an event registration system: public sign-up, payment proof, ticket and QR, admin dashboard, gate scanner and payment-screenshot reading. Sample data only.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#14231e; --muted:#5b6b64; --paper:#f1f4f1; --card:#ffffff; --line:#d9e0db;
+  --rose:#b83a62; --rose-d:#962d4e; --ok:#1f7a5a; --warn:#9a5b00;
+  --serif:'Fraunces',Georgia,serif; --sans:'Figtree',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{--ink:#eaf1ed; --muted:#9db0a7; --paper:#0f1a16; --card:#16251f; --line:#27382f; --rose:#e0678c; --rose-d:#ee86a5; --ok:#57c79c; --warn:#e6b25c}
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.55 var(--sans)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--rose);outline-offset:2px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+header.top{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 0}
+.brand{font:700 1.25rem var(--serif);text-decoration:none;letter-spacing:.2px}
+.brand span{color:var(--rose)}
+.back{font-size:.95rem;color:var(--muted);text-decoration:none}
+.back:hover{color:var(--rose)}
+.hero{padding:30px 0 18px}
+.eyebrow{font:600 .8rem var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--rose);margin:0 0 10px}
+.hero h1{font:700 clamp(2rem,5.5vw,3.4rem)/1.08 var(--serif);margin:0 0 14px;letter-spacing:-.02em;max-width:18ch}
+.hero p{margin:0;max-width:62ch;color:var(--muted);font-size:1.08rem}
+.status{margin:22px 0 0;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;max-width:560px}
+.status b{display:block;font-weight:600;margin-bottom:8px}
+.track{height:6px;background:var(--line);border-radius:99px;overflow:hidden}
+.track i{display:block;height:100%;width:3%;background:var(--ok);transition:width .35s}
+.status small{display:block;margin-top:8px;color:var(--muted)}
+.status.ready b{color:var(--ok)}
+.status.ready .track{display:none}
+h2{font:700 1.5rem var(--serif);margin:0 0 6px}
+section{padding:26px 0 6px}
+.lead{margin:0 0 16px;color:var(--muted);max-width:62ch}
+.launch{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:8px}
+.card h3{font:700 1.15rem var(--serif);margin:0}
+.card p{margin:0;color:var(--muted);font-size:.95rem;flex:1}
+.card .who{font-size:.85rem;color:var(--muted)}
+.btn{font:600 .95rem var(--sans);border:0;border-radius:999px;padding:10px 18px;cursor:pointer;background:var(--ink);color:var(--paper);text-decoration:none;display:inline-block;text-align:center;margin-top:6px}
+.btn:hover{background:var(--rose);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.ghost:hover{border-color:var(--rose);color:var(--rose);background:transparent}
+ol.tour{margin:0;padding:0;list-style:none;counter-reset:s;display:grid;gap:10px;max-width:760px}
+ol.tour li{counter-increment:s;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px 12px 52px;position:relative}
+ol.tour li::before{content:counter(s);position:absolute;left:14px;top:12px;width:26px;height:26px;border-radius:50%;background:var(--rose);color:#fff;font:600 .85rem/26px var(--sans);text-align:center}
+ol.tour b{font-weight:600}
+code{font:500 .9em ui-monospace,Menlo,Consolas,monospace;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:1px 6px}
+.qrs{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;max-width:760px}
+.qr{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center}
+.qr .box{background:#fff;border-radius:8px;padding:8px;display:inline-block;line-height:0}
+.qr .box svg{width:112px;height:112px}
+.qr b{display:block;margin-top:8px;font-size:.92rem}
+.qr span{font-size:.82rem;color:var(--muted)}
+.feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px 22px;margin:0;padding:0;list-style:none;max-width:900px}
+.feat li{padding-left:22px;position:relative;color:var(--muted)}
+.feat li::before{content:"";position:absolute;left:0;top:.55em;width:9px;height:9px;border-radius:50%;background:var(--rose)}
+.feat b{color:var(--ink);font-weight:600}
+.note{margin-top:22px;border-left:3px solid var(--warn);background:var(--card);border-radius:0 10px 10px 0;padding:12px 16px;max-width:760px;color:var(--muted);font-size:.95rem}
+.note b{color:var(--ink)}
+footer{padding:34px 0 60px;color:var(--muted);font-size:.92rem;display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center}
+footer button{font:inherit;background:none;border:0;color:var(--rose);text-decoration:underline;cursor:pointer;padding:0}
+.empty{color:var(--muted);font-size:.95rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="../">R6 <span>Invites</span></a>
+    <a class="back" href="../">&larr; All projects</a>
+  </header>
+
+  <div class="hero">
+    <p class="eyebrow">Live demo</p>
+    <h1>Event registration, from sign-up to the gate.</h1>
+    <p>A working copy of a registration system built for a community event. People register and send proof of payment, organisers approve, tickets with QR codes are issued, and the gate scans them in. Everything below runs for real on sample data.</p>
+    <div class="status" id="status" role="status" aria-live="polite">
+      <b id="st-t">Getting your private demo ready</b>
+      <div class="track"><i id="st-b"></i></div>
+      <small id="st-s">First visit only, about 15 seconds. A private copy of the database is set up in this browser.</small>
+    </div>
+  </div>
+
+  <section aria-labelledby="open">
+    <h2 id="open">Open it</h2>
+    <p class="lead">Three views of the same system. Open them in any order; they share the same sample data.</p>
+    <div class="launch">
+      <div class="card">
+        <h3>Public page</h3>
+        <p>What a participant sees: event details, registration form, payment, ticket lookup, QR ticket and download.</p>
+        <span class="who">Best on a phone-sized window.</span>
+        <button class="btn" id="go-public" type="button">Open the public page</button>
+      </div>
+      <div class="card">
+        <h3>Admin dashboard</h3>
+        <p>For organisers: payments to approve, people, dashboard summary, settings, feedback, transfers and payment-screenshot reading.</p>
+        <span class="who">Signs you in as <b>Demo Admin</b>.</span>
+        <button class="btn" id="go-admin" type="button">Open the dashboard</button>
+      </div>
+      <div class="card">
+        <h3>Gate scanner</h3>
+        <p>For the entry desk: scan a ticket QR with the camera, or find a person by name, phone or ticket number.</p>
+        <span class="who">Signs you in as <b>Demo Gate Desk</b>.</span>
+        <button class="btn" id="go-gate" type="button">Open the gate</button>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="tour">
+    <h2 id="tour">A two-minute tour</h2>
+    <p class="lead">Follow these in order to see a registration travel all the way through.</p>
+    <ol class="tour">
+      <li><b>Register.</b> On the public page press Register, enter any name and a 10-digit number such as <code>9000012345</code>, and upload any picture as the payment screenshot.</li>
+      <li><b>Approve.</b> In the dashboard open <b>Payments</b>. Your booking is at the top. Press <b>Paid</b>, then <b>Yes, approve</b>. Ticket numbers are issued.</li>
+      <li><b>Get the ticket.</b> Back on the public page choose <b>View my ticket</b>, enter your Booking ID and number, and open the ticket. Download it as JPG or PDF.</li>
+      <li><b>Admit.</b> In the gate view, search your name and admit yourself, or scan one of the sample QR codes below. Scan it twice to see the &ldquo;already scanned&rdquo; warning.</li>
+      <li><b>Check payments automatically.</b> In <b>Payments</b> press <b>Scan screenshots</b>. The page reads the payment ID and amount from each screenshot and flags two bookings that share one ID.</li>
+      <li><b>Look around.</b> The Today page summarises what needs attention. People, Feedback, Game messages and Settings are all live.</li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="qrs-h">
+    <h2 id="qrs-h">Sample tickets to scan</h2>
+    <p class="lead">Open the gate view, press <b>Start camera</b> and point it at one of these codes. They work on any device, so you can show them on a laptop and scan with your phone.</p>
+    <div class="qrs" id="qrs"><p class="empty">Loading sample tickets&hellip;</p></div>
+  </section>
+
+  <section aria-labelledby="inside">
+    <h2 id="inside">What is inside</h2>
+    <ul class="feat">
+      <li><b>Public registration</b> with group bookings, a spots counter and a closing time</li>
+      <li><b>Payment by UPI</b> with a screenshot upload</li>
+      <li><b>Ticket generation</b> as a picture and PDF, with a QR on every ticket</li>
+      <li><b>QR scanning</b> at the gate with the camera, and a search for anyone without a code</li>
+      <li><b>Payment-screenshot reading (OCR)</b> that finds payment IDs and amounts and flags repeats</li>
+      <li><b>Dashboard summary</b> with charts, pending payments and live counts</li>
+      <li><b>Ticket transfers</b> between participants, with admin approval</li>
+      <li><b>Warnings</b> for many sign-ups from one network and for reused payment IDs</li>
+      <li><b>Feedback, game messages and prizes</b> handed out per ticket</li>
+      <li><b>Settings with a change log</b> for price, limit, deadline, contacts and event details</li>
+    </ul>
+    <div class="note"><b>Demo only.</b> Every name, phone number, payment and screenshot here is made up. Nothing is sent anywhere. The data lives only in this browser, so what you add stays on your device and other visitors never see it. The look of the original event is kept so you can see the real design.</div>
+  </section>
+
+  <footer>
+    <span>Built by R6 Invites.</span>
+    <button type="button" id="reset">Reset the demo to its starting data</button>
+  </footer>
+</div>
+
+<script src="app/demo/demo-backend.js" data-overlay="off" data-tab="off"></script>
+<script src="app/demo/qrcode.js"></script>
+<script>
+(function(){
+  var st=document.getElementById('status'), bar=document.getElementById('st-b'), tt=document.getElementById('st-t'), ss=document.getElementById('st-s');
+  DemoBackend.onProgress(function(p,t){ bar.style.width=Math.max(3,Math.round(p*100))+'%'; if(p<1) ss.textContent=t+'. First visit only, about 15 seconds.'; });
+  DemoBackend.ready().then(function(be){
+    st.classList.add('ready'); tt.textContent='Your private demo is ready'; ss.textContent='Sample data is loaded. Changes you make stay in this browser.';
+    return be.sql("select public._ticket_label(t.kind,t.ticket_no,t.coord_no) as label, t.secret, t.name from public.tickets t join public.bookings b on b.id=t.booking_id where b.status='paid' and t.kind='guest' and t.checked_in_at is null and t.ticket_no between 12 and 40 order by t.ticket_no limit 4");
+  }).then(function(r){
+    var box=document.getElementById('qrs'); box.innerHTML='';
+    r.rows.forEach(function(x){
+      var q=qrcode(0,'M'); q.addData(x.label+'|'+x.secret); q.make();
+      var d=document.createElement('div'); d.className='qr';
+      d.innerHTML='<div class="box">'+q.createSvgTag({cellSize:4,margin:0,scalable:true})+'</div><b></b><span></span>';
+      d.querySelector('b').textContent=x.name; d.querySelector('span').textContent='Ticket '+x.label;
+      box.appendChild(d);
+    });
+    if(!r.rows.length) box.innerHTML='<p class="empty">All sample tickets have been used. Reset the demo to get them back.</p>';
+  }).catch(function(e){ tt.textContent='The demo could not start'; ss.textContent=String(e&&e.message||e)+' Try Reset, or use a different browser.'; });
+
+  function go(who,url){ return function(){ DemoBackend.signInAs(who).then(function(){ location.href=url; }); }; }
+  document.getElementById('go-public').onclick=function(){ DemoBackend.signOut(); location.href='app/'; };
+  document.getElementById('go-admin').onclick=go('admin','app/admin/');
+  document.getElementById('go-gate').onclick=go('gate','app/admin/#gate');
+  document.getElementById('reset').onclick=function(){ if(confirm('Reset the demo? Anything you added will be removed and the sample data comes back.')) DemoBackend.reset(); };
+})();
+</script>
+</body>
+</html>
