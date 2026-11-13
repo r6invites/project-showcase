@@ -4,7 +4,7 @@
   "links": [
     {
       "label": "Try the live demo",
-      "url": "ca-meetup/"
+      "url": "projects/ca-meetup-register/demo/"
     }
   ],
   "desc": "Complete registration for a community event: public sign-up, UPI payment proof, tickets with QR codes, QR scanning at the gate, payment-screenshot reading and an admin dashboard. The demo runs on sample data.",
