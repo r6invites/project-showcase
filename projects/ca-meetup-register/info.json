@@ -16,5 +16,6 @@
     "Admin dashboard",
     "Mobile-first"
   ],
-  "featured": true
+  "featured": true,
+  "aspect": "16/9"
 }
