@@ -1,0 +1,24 @@
+{
+  "ca-meetup-register": [
+    "cover.jpg",
+    "full.mp4",
+    "info.json",
+    "preview.mp4"
+  ],
+  "emerald-nikah": [
+    "cover-v2.jpg",
+    "cover.jpg",
+    "full.mp4",
+    "info.json",
+    "preview.mp4"
+  ],
+  "maroon-gold-nikah": [
+    "cover-v2.jpg",
+    "cover.jpg",
+    "full.mp4",
+    "info.json",
+    "preview-v2.mp4",
+    "preview-v3.mp4",
+    "preview.mp4"
+  ]
+}
