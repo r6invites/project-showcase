@@ -7,70 +7,75 @@
 <meta name="description" content="A working demo of an event registration system: public sign-up, payment proof, ticket and QR, admin dashboard, gate scanner and payment-screenshot reading. Sample data only.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#14231e; --muted:#5b6b64; --paper:#f1f4f1; --card:#ffffff; --line:#d9e0db;
-  --rose:#b83a62; --rose-d:#962d4e; --ok:#1f7a5a; --warn:#9a5b00;
-  --serif:'Fraunces',Georgia,serif; --sans:'Figtree',system-ui,-apple-system,'Segoe UI',sans-serif;
-}
-@media (prefers-color-scheme:dark){
-  :root{--ink:#eaf1ed; --muted:#9db0a7; --paper:#0f1a16; --card:#16251f; --line:#27382f; --rose:#e0678c; --rose-d:#ee86a5; --ok:#57c79c; --warn:#e6b25c}
+  color-scheme:dark;
+  --ink:#f5ede2; --muted:#ab9fa0; --paper:#0c0a0d; --card:#17121a; --card2:#1d1621; --line:#2c2330; --line2:#3d303f;
+  --rose:#d9b46f; --rose-d:#f0d79e; --ok:#6fd1a6; --warn:#d9b46f; --faint:#978b93;
+  --gold-grad:linear-gradient(135deg,#f0d79e 0%,#d9b46f 45%,#b98f4c 100%);
+  --serif:'Cormorant Garamond','Playfair Display',Georgia,serif; --sans:'Figtree',system-ui,-apple-system,'Segoe UI',sans-serif;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.55 var(--sans)}
+body{margin:0;color:var(--ink);font:400 16px/1.6 var(--sans);-webkit-font-smoothing:antialiased;background:radial-gradient(900px 520px at 88% -8%,rgba(122,31,61,.36),transparent 70%),radial-gradient(760px 480px at 6% 2%,rgba(217,180,111,.12),transparent 70%),var(--paper);background-repeat:no-repeat}
+::selection{background:#d9b46f;color:#1a1210}
 a{color:inherit}
-:focus-visible{outline:3px solid var(--rose);outline-offset:2px}
+:focus-visible{outline:2px solid var(--rose-d);outline-offset:3px;border-radius:6px}
 .wrap{max-width:1040px;margin:0 auto;padding:0 20px}
 header.top{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 0}
-.brand{font:700 1.25rem var(--serif);text-decoration:none;letter-spacing:.2px}
+.brand{display:inline-flex;align-items:center;gap:12px;font:600 1.05rem var(--sans);letter-spacing:.14em;text-transform:uppercase;text-decoration:none}
+.brand::before{content:"R6";display:grid;place-items:center;width:38px;height:38px;border-radius:11px;font:700 1.1rem var(--serif);letter-spacing:0;text-transform:none;color:#1b1209;background:var(--gold-grad);box-shadow:0 6px 18px rgba(217,180,111,.28)}
 .brand span{color:var(--rose)}
-.back{font-size:.95rem;color:var(--muted);text-decoration:none}
-.back:hover{color:var(--rose)}
-.hero{padding:30px 0 18px}
-.eyebrow{font:600 .8rem var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--rose);margin:0 0 10px}
-.hero h1{font:700 clamp(2rem,5.5vw,3.4rem)/1.08 var(--serif);margin:0 0 14px;letter-spacing:-.02em;max-width:18ch}
+.back{font-size:.9rem;font-weight:500;color:var(--ink);text-decoration:none;border:1px solid var(--line2);border-radius:999px;padding:8px 16px;transition:.2s}
+.back:hover{color:var(--rose-d);border-color:var(--rose);background:rgba(217,180,111,.08)}
+.hero{padding:44px 0 22px}
+.eyebrow{font:600 .74rem var(--sans);letter-spacing:.26em;text-transform:uppercase;color:var(--rose);margin:0 0 14px}
+.hero h1{font:600 clamp(2.6rem,7vw,4.6rem)/1.02 var(--serif);margin:0 0 18px;letter-spacing:-.01em;max-width:16ch}
 .hero p{margin:0;max-width:62ch;color:var(--muted);font-size:1.08rem}
-.status{margin:22px 0 0;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;max-width:560px}
+.hero .eyebrow{margin-bottom:14px}
+.status{margin:26px 0 0;background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:16px;padding:16px 18px;max-width:560px}
 .status b{display:block;font-weight:600;margin-bottom:8px}
 .track{height:6px;background:var(--line);border-radius:99px;overflow:hidden}
-.track i{display:block;height:100%;width:3%;background:var(--ok);transition:width .35s}
+.track i{display:block;height:100%;width:3%;background:var(--gold-grad);transition:width .35s}
 .status small{display:block;margin-top:8px;color:var(--muted)}
 .status.ready b{color:var(--ok)}
 .status.ready .track{display:none}
-h2{font:700 1.5rem var(--serif);margin:0 0 6px}
-section{padding:26px 0 6px}
+h2{font:600 clamp(1.9rem,4vw,2.5rem)/1.1 var(--serif);margin:0 0 8px}
+section{padding:34px 0 8px}
 .lead{margin:0 0 16px;color:var(--muted);max-width:62ch}
 .launch{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:8px}
-.card h3{font:700 1.15rem var(--serif);margin:0}
+.card{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:10px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 18px 40px -24px rgba(0,0,0,.8);transition:transform .3s,border-color .3s}
+.card:hover{transform:translateY(-4px);border-color:rgba(217,180,111,.5)}
+.card h3{font:600 1.6rem/1.1 var(--serif);margin:0}
 .card p{margin:0;color:var(--muted);font-size:.95rem;flex:1}
 .card .who{font-size:.85rem;color:var(--muted)}
-.btn{font:600 .95rem var(--sans);border:0;border-radius:999px;padding:10px 18px;cursor:pointer;background:var(--ink);color:var(--paper);text-decoration:none;display:inline-block;text-align:center;margin-top:6px}
-.btn:hover{background:var(--rose);color:#fff}
-.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
-.btn.ghost:hover{border-color:var(--rose);color:var(--rose);background:transparent}
+.btn{font:600 .95rem var(--sans);border:0;border-radius:999px;padding:13px 20px;cursor:pointer;background:var(--gold-grad);color:#1b1209;text-decoration:none;display:inline-block;text-align:center;margin-top:8px;box-shadow:0 10px 24px -12px rgba(217,180,111,.7);transition:.2s}
+.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line2);box-shadow:none}
+.btn.ghost:hover{border-color:var(--rose);color:var(--rose-d);background:rgba(217,180,111,.07)}
 ol.tour{margin:0;padding:0;list-style:none;counter-reset:s;display:grid;gap:10px;max-width:760px}
-ol.tour li{counter-increment:s;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px 12px 52px;position:relative}
-ol.tour li::before{content:counter(s);position:absolute;left:14px;top:12px;width:26px;height:26px;border-radius:50%;background:var(--rose);color:#fff;font:600 .85rem/26px var(--sans);text-align:center}
+ol.tour li{counter-increment:s;background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:16px;padding:15px 18px 15px 62px;position:relative}
+ol.tour li::before{content:counter(s);position:absolute;left:18px;top:14px;width:30px;height:30px;border-radius:50%;background:var(--gold-grad);color:#1b1209;font:700 1.1rem/30px var(--serif);text-align:center}
 ol.tour b{font-weight:600}
-code{font:500 .9em ui-monospace,Menlo,Consolas,monospace;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:1px 6px}
+code{font:500 .9em ui-monospace,Menlo,Consolas,monospace;color:var(--rose-d);background:rgba(217,180,111,.08);border:1px solid rgba(217,180,111,.25);border-radius:6px;padding:1px 6px}
 .qrs{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;max-width:760px}
-.qr{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center}
+.qr{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:16px;padding:14px;text-align:center}
 .qr .box{background:#fff;border-radius:8px;padding:8px;display:inline-block;line-height:0}
 .qr .box svg{width:112px;height:112px}
 .qr b{display:block;margin-top:8px;font-size:.92rem}
 .qr span{font-size:.82rem;color:var(--muted)}
 .feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px 22px;margin:0;padding:0;list-style:none;max-width:900px}
 .feat li{padding-left:22px;position:relative;color:var(--muted)}
-.feat li::before{content:"";position:absolute;left:0;top:.55em;width:9px;height:9px;border-radius:50%;background:var(--rose)}
+.feat li::before{content:"";position:absolute;left:0;top:.6em;width:8px;height:8px;border-radius:50%;background:var(--gold-grad)}
 .feat b{color:var(--ink);font-weight:600}
-.note{margin-top:22px;border-left:3px solid var(--warn);background:var(--card);border-radius:0 10px 10px 0;padding:12px 16px;max-width:760px;color:var(--muted);font-size:.95rem}
+.note{margin-top:24px;border-left:3px solid var(--warn);background:var(--card);border-radius:0 14px 14px 0;padding:12px 16px;max-width:760px;color:var(--muted);font-size:.95rem}
 .note b{color:var(--ink)}
 footer{padding:34px 0 60px;color:var(--muted);font-size:.92rem;display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center}
-footer button{font:inherit;background:none;border:0;color:var(--rose);text-decoration:underline;cursor:pointer;padding:0}
+footer button{font:inherit;background:none;border:0;color:var(--rose-d);text-decoration:underline;cursor:pointer;padding:0}
 .empty{color:var(--muted);font-size:.95rem}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition-duration:.01ms!important}}
+@media (max-width:560px){.wrap{padding:0 18px}.hero{padding:30px 0 14px}.back{padding:8px 14px}.brand{font-size:.95rem}}
 </style>
 </head>
 <body>
@@ -84,6 +89,7 @@ footer button{font:inherit;background:none;border:0;color:var(--rose);text-decor
     <p class="eyebrow">Live demo</p>
     <h1>Event registration, from sign-up to the gate.</h1>
     <p>A working copy of a registration system built for a community event. People register and send proof of payment, organisers approve, tickets with QR codes are issued, and the gate scans them in. Everything below runs for real on sample data.</p>
+    <p style="margin:24px 0 0"><a class="btn" href="#open" style="margin:0 10px 0 0">Open the demo</a><a class="btn ghost" href="#tour" style="margin:0">Take the 2-minute tour</a></p>
     <div class="status" id="status" role="status" aria-live="polite">
       <b id="st-t">Getting your private demo ready</b>
       <div class="track"><i id="st-b"></i></div>
