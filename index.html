@@ -200,7 +200,7 @@ footer .links a#fWa:hover{filter:brightness(1.08);color:#1b1209}
       <a data-phone href="#">Call</a>
     </nav>
   </header>
-  <section class="hero">
+  <section class="hero" aria-labelledby="heroTitle">
     <div class="eyebrow">Digital invitations &amp; custom sites</div>
     <h1 id="heroTitle">Websites made to be <em>remembered.</em></h1>
     <p id="heroText">Browse our work below. Every project shows its starting price, and you can try each demo yourself.</p>
@@ -212,7 +212,7 @@ footer .links a#fWa:hover{filter:brightness(1.08);color:#1b1209}
   </section>
 </div>
 
-<div class="bar" id="bar" hidden>
+<div class="bar" id="bar" role="region" aria-label="Search and filters" hidden>
   <div class="wrap">
     <div class="sbox">
       <input type="search" id="q" placeholder="Search by name, tag or description  ( / )" aria-label="Search projects" autocomplete="off" enterkeyhint="search">
@@ -239,9 +239,9 @@ footer .links a#fWa:hover{filter:brightness(1.08);color:#1b1209}
   <noscript><div class="empty"><p>This page needs JavaScript to show the projects.</p></div></noscript>
 </main>
 
-<section class="how" id="how" hidden>
+<section class="how" id="how" aria-labelledby="howT" hidden>
   <div class="wrap">
-    <h2>How it works</h2>
+    <h2 id="howT">How it works</h2>
     <p class="sub">From picking a design to sharing your invitation.</p>
     <ol class="steps">
       <li><b>Pick a design</b><span>Open any demo above and try it on your phone.</span></li>
