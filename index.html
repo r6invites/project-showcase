@@ -187,6 +187,17 @@ footer .links a#fWa:hover{filter:brightness(1.08);color:#1b1209}
 .kbd{font:600 .72rem var(--sans);border:1px solid var(--line2);border-radius:6px;padding:1px 7px;color:var(--faint)}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 .sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.phone{flex:1 1 100%;display:none;cursor:pointer;background:transparent;font-family:inherit}
+@media (hover:hover) and (pointer:fine){.phone{display:block}}
+.phone:hover{border-color:var(--gold);color:var(--gold2);background:rgba(217,180,111,.07)}
+#qrdlg{background:var(--card2);color:var(--ink);text-align:center;padding:30px 28px 26px;max-width:340px;width:calc(100vw - 40px)}
+#qrdlg h3{font:600 1.7rem/1.1 var(--serif);margin:0 0 6px}
+#qrdlg p{margin:0 0 16px;color:var(--muted);font-size:.92rem}
+#qrbox{background:#fff;border-radius:16px;padding:14px;display:inline-block;line-height:0;margin-bottom:14px}
+#qrbox svg{width:210px;height:210px}
+#qrdlg .row{display:flex;gap:10px;justify-content:center}
+#qrdlg .row button{position:static;border-radius:999px;padding:9px 20px;font:600 .9rem var(--sans);cursor:pointer;background:transparent;color:var(--ink);border:1px solid var(--line2)}
+#qrdlg .row button:hover{border-color:var(--gold);color:var(--gold2)}
 </style>
 </head>
 <body>
@@ -252,6 +263,7 @@ footer .links a#fWa:hover{filter:brightness(1.08);color:#1b1209}
   </div>
 </section>
 
+<dialog id="qrdlg" aria-labelledby="qrT"><h3 id="qrT">Open on your phone</h3><p id="qrP">Scan with your phone camera.</p><div id="qrbox" aria-hidden="true"></div><div class="row"><button type="button" id="qrCopy">Copy link</button><button type="button" id="qrClose">Close</button></div></dialog>
 <dialog id="dlg" aria-label="Project video"><button id="dclose">Close</button><video id="dvid" controls playsinline></video></dialog>
 
 <footer id="foot" hidden>
@@ -403,12 +415,14 @@ function card(p){
   const live=p.links.map(l=>`<a class="btn ghost" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label||"View live")}<span class="sr-only"> (opens in a new tab)</span></a>`).join("");
   const ask = SITE.whatsapp ? `<a class="btn primary" href="https://wa.me/${waDigits()}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">Get a quote<span class="sr-only"> for ${esc(p.name)} on WhatsApp</span></a>`
     : SITE.email ? `<a class="btn primary" href="mailto:${esc(SITE.email)}?subject=${encodeURIComponent("Quotation for a site like "+p.name)}&body=${encodeURIComponent(msg)}">Get a quote</a>` : "";
-  const hint = p.aspect==="9/16" && p.links.length ? '<p class="hint">Made for phones. Best opened on your mobile.</p>' : "";
+  const mobile = p.aspect==="9/16" && p.links.length;
+  const hint = mobile ? '<p class="hint">Made for phones. Best opened on your mobile.</p>' : "";
+  const phone = mobile ? `<button type="button" class="btn ghost phone" data-qr="${esc(p.dir)}">View on your phone (QR code)</button>` : "";
   return `<article class="card" id="p-${esc(p.dir)}" data-dir="${esc(p.dir)}">${thumb(p)}<div class="body">
     <div class="head"><h3>${esc(p.name)}</h3><button class="share" data-share="${esc(p.dir)}" aria-label="Share ${esc(p.name)}" title="Share">${SHARE_ICON}</button></div>${p.desc?`<p>${esc(p.desc)}</p>`:""}
     ${p.tags.length?`<div class="tags">${p.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join("")}</div>`:""}
     <div class="quote"><small>${p.price===null?"Price":"Starting at"}</small><span class="price">${p.price===null?"On request":fmt(p.price)}</span></div>
-    ${live||ask?`<div class="actions">${live}${ask}</div>`:""}${hint}
+    ${live||ask?`<div class="actions">${live}${phone}${ask}</div>`:""}${hint}
   </div></article>`;
 }
 
@@ -448,10 +462,24 @@ async function shareProject(dir){
 }
 $("#results").addEventListener("click",e=>{
   const s=e.target.closest(".share"); if(s){shareProject(s.dataset.share); return;}
+  const qb=e.target.closest(".phone"); if(qb){showQR(qb.dataset.qr); return;}
   if(e.target.closest("#emptyReset")){resetAll(); return;}
   const b=e.target.closest(".play")||e.target.closest(".thumb.has-v"); if(!b) return;
   const d=$("#dlg"), v=$("#dvid"); v.src=b.dataset.v; d.setAttribute("aria-label",b.dataset.n); d.showModal(); v.play().catch(()=>{});
 });
+/* a QR code so a computer visitor can open a phone-made demo on their phone */
+let QRLIB=null;
+function loadQR(){return QRLIB||(QRLIB=new Promise((res,rej)=>{if(window.qrcode) return res(); const s=document.createElement("script"); s.src="assets/qrcode.js"; s.onload=res; s.onerror=()=>{QRLIB=null;rej()}; document.head.appendChild(s);}));}
+async function showQR(dir){
+  const p=PROJECTS.find(x=>x.dir===dir); if(!p||!p.links.length) return;
+  const url=new URL(p.links[0].url,location.href).href;
+  try{await loadQR(); const q=qrcode(0,"M"); q.addData(url); q.make(); $("#qrbox").innerHTML=q.createSvgTag({cellSize:6,margin:0,scalable:true});}
+  catch(_){toast("Couldn't make the QR code. Please try again."); return;}
+  $("#qrP").textContent="Scan with your phone camera to open the "+p.name+" demo."; $("#qrCopy").dataset.url=url; $("#qrdlg").showModal();
+}
+$("#qrClose").addEventListener("click",()=>$("#qrdlg").close());
+$("#qrdlg").addEventListener("click",e=>{if(e.target.id==="qrdlg") $("#qrdlg").close();});
+$("#qrCopy").addEventListener("click",async e=>{try{await navigator.clipboard.writeText(e.target.dataset.url); toast("Link copied");}catch(_){prompt("Copy this link",e.target.dataset.url);}});
 $("#dclose").addEventListener("click",()=>$("#dlg").close());
 $("#dlg").addEventListener("close",()=>{const v=$("#dvid"); v.pause(); v.removeAttribute("src"); v.load();});
 $("#dlg").addEventListener("click",e=>{if(e.target.id==="dlg") $("#dlg").close();});
