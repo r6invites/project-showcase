@@ -1,0 +1,52 @@
+HOW TO ADD A NEW PROJECT TO THE SHOWCASE
+=========================================
+
+1. Make a new folder inside "projects" and give it a short name with no spaces,
+   for example:  projects/salon-glow
+   (Copy "_template" and rename it, or create a folder from scratch.)
+
+2. Put these files in it:
+
+     info.json    required. The card's details (see the example in this folder).
+     cover.jpg    the picture shown on the card. Any name works as long as it
+                  starts with "cover" (cover.jpg, cover.png, cover.webp).
+     preview.mp4  optional. A short video that plays on the card.
+     full.mp4     optional. The longer video behind "Watch full view".
+
+   If there is a demo, put it in a sub-folder (for example "demo" or
+   "interactive") with an index.html inside, and link to it from info.json.
+
+3. Save the changes (commit). The card appears on the site within a minute or two.
+   Nothing else needs editing.
+
+WHAT GOES IN info.json
+-----------------------
+   name       the title of the card
+   category   cards with the same category are grouped together
+   price      the starting price as a number (leave this line out for "On request")
+   date       optional, YYYY-MM-DD. Shows a "New" badge for 45 days and
+              enables "Newest first" sorting
+   featured   true puts a "Featured" badge on it and lists it first
+   aspect     the shape of the picture and video: "16/9" (wide, default is 16/10)
+              or "9/16" (phone shaped). Phone-shaped cards also get a
+              "View on your phone" QR button on computers
+   desc       one or two sentences
+   tags       short words, shown as small pills
+   links      buttons on the card. "url" can start with "projects/..." for a demo
+              inside this site, or be a full address starting with https://
+
+IF A CARD DOES NOT SHOW UP
+---------------------------
+   - The folder name must not start with an underscore (_). Folders that start
+     with "_" are ignored on purpose. This template folder is one.
+   - info.json must be valid. A missing comma or quote hides the card. You can
+     paste the file into  jsonlint.com  to find the mistake.
+   - The file must be called exactly "info.json", all lowercase.
+   - Wait a minute or two, then refresh. If the old version keeps showing,
+     hold Shift and press refresh.
+
+THE LIST OF PROJECTS (projects/index.json)
+-------------------------------------------
+   You do not need to touch this file. It is a safety copy of the project list
+   that the site falls back to if GitHub is busy. It updates itself whenever you
+   add or change a project.

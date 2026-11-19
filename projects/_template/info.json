@@ -1,0 +1,13 @@
+{
+  "name": "Project name",
+  "category": "Wedding Invitations",
+  "price": 1999,
+  "date": "2026-12-01",
+  "featured": false,
+  "aspect": "9/16",
+  "desc": "One or two sentences about what makes this project special.",
+  "tags": ["Animated", "Mobile-first"],
+  "links": [
+    { "label": "Interactive demo", "url": "projects/YOUR-FOLDER-NAME/interactive/" }
+  ]
+}
